@@ -16,13 +16,21 @@
 
 ## 🚀 Installation
 
-`dev-pal` is a self-contained Go application. Installation is handled by a single script.
-
 **Prerequisites:**
+- You must have [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed.
 - You must have [Go](https://golang.org/doc/install) (version 1.18 or newer) installed.
-- You must be in a `bash` or `zsh` compatible shell.
 
-**Installation Steps:**
+### Quick Install (Recommended)
+
+You can install `dev-pal` with a single command. This will download the bootstrap installer, clone the repository, build the binary, and install it on your system.
+
+```bash
+curl -sSL https://raw.githubusercontent.com/MrPrinceTheProgrammer/p2pGit/main/bootstrap-installer.sh | bash
+```
+
+### Manual Installation
+
+If you prefer, you can perform the installation steps manually:
 
 1.  **Clone the repository:**
     ```bash
@@ -30,8 +38,8 @@
     cd p2pGit
     ```
 
-2.  **Run the installer:**
-    This script will build the `dev-pal` binary and install it globally on your system. It may prompt for administrator (`sudo`) privileges to copy the binary to `/usr/local/bin`.
+2.  **Run the local installer:**
+    This script will build the `dev-pal` binary and install it globally.
     ```bash
     ./install-dev-pal.sh
     ```
