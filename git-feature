@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Mr.the-ai-dev: AI-Assisted Branch Namer
+
+FEATURE_DESCRIPTION="$1"
+
+if [ -z "$FEATURE_DESCRIPTION" ]; then
+    echo "❌ Mamae! You gotta tell me what the feature is about."
+    echo "Usage: ./git-feature \"Your awesome feature description\""
+    exit 1
+fi
+
+echo "🧠 Asking Mr.the-ai-dev to come up with a cool branch name..."
+
+PROMPT="You are an expert software engineer. Based on the following feature description, generate a concise, lowercase, kebab-case git branch name. The name should start with 'feat/', 'fix/', or 'chore/'.
+
+Description: \"$FEATURE_DESCRIPTION\"
+
+Branch name:"
+
+JSON_DATA="{\"message\": \"$PROMPT\", \"history\": []}"
+API_URL="https://svceai.site/api/chat"
+TIMEOUT=15
+
+# Call API
+API_RESPONSE=$(curl -s --max-time $TIMEOUT -L -X POST "$API_URL" \
+    -H "Content-Type: application/json" \
+    -d "$JSON_DATA" 2>/dev/null)
+
+if [ -z "$API_RESPONSE" ]; then
+    echo "⚠️ Mr.the-ai-dev is offline. Could not generate a branch name."
+    exit 1
+fi
+
+# Sanitize the branch name from the AI response
+BRANCH_NAME=$(echo "$API_RESPONSE" | tail -n 1 | tr '[:upper:]' '[:lower:]' | sed -e 's/[ _]/-/g' -e 's/[^a-z0-9\/-]//g')
+
+if [ -z "$BRANCH_NAME" ]; then
+    echo "⚠️ The AI returned an empty branch name. Please try again."
+    exit 1
+fi
+
+echo "✅ AI suggested branch name: $BRANCH_NAME"
+echo "Creating and switching to the new branch..."
+
+git checkout -b "$BRANCH_NAME"
+
+if [ $? -eq 0 ]; then
+    echo "🚀 Done! You are now on branch '$BRANCH_NAME'. Happy coding, Mamae!"
+else
+    echo "❌ Failed to create branch. Does a branch with a similar name already exist?"
+    exit 1
+fi
