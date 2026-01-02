@@ -27,9 +27,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Running dev-pal setup to install it globally (may require sudo)..."
-# The setup command itself will handle the sudo prompt if needed.
-./dev-pal setup
+echo "Running dev-pal setup to install it globally..."
+echo "This requires administrator privileges to write to /usr/local/bin."
+sudo ./dev-pal setup
 
 if [ $? -ne 0 ]; then
     echo "❌ dev-pal setup failed. Please check the output above."
