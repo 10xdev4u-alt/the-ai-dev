@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Mr.the-ai-dev: AI-Assisted PR Description Generator
+
+BASE_BRANCH=${1:-"main"} # Allow overriding the base branch, default to main
+
+if ! git rev-parse --verify $BASE_BRANCH >/dev/null 2>&1; then
+    echo "❌ Base branch '$BASE_BRANCH' not found."
+    exit 1
+fi
+
+CURRENT_BRANCH=$(git branch --show-current)
+if [ "$CURRENT_BRANCH" == "$BASE_BRANCH" ]; then
+    echo "❌ You are on the base branch. Switch to your feature branch first."
+    exit 1
+fi
+
+echo "🧠 Analyzing commits and diffs on branch '$CURRENT_BRANCH'..."
+
+# Get commit log and diff
+COMMIT_LOG=$(git log $BASE_BRANCH..HEAD --oneline)
+DIFF_STAT=$(git diff $BASE_BRANCH...HEAD --stat)
+
+if [ -z "$COMMIT_LOG" ]; then
+    echo "🤔 No new commits found on this branch compared to '$BASE_BRANCH'."
+    exit 1
+fi
+
+PROMPT="You are an expert technical writer. Based on the following commit log and diff statistics, generate a Pull Request title and a detailed markdown description.
+
+The title should be a single line summarizing the change.
+
+The description should have two sections:
+1.  '## What Changed?' - A bulleted list explaining the key changes.
+2.  '## Why?' - A brief explanation of the reason for these changes.
+
+---
+Commit Log:
+$COMMIT_LOG
+
+---
+Diff Stat:
+$DIFF_STAT
+---
+
+Now, generate the PR title and description."
+
+JSON_DATA="{\"message\": \"$PROMPT\", \"history\": []}"
+API_URL="https://svceai.site/api/chat"
+TIMEOUT=30
+
+echo "🤖 Asking Mr.the-ai-dev to write your PR description..."
+
+# Call API
+API_RESPONSE=$(curl -s --max-time $TIMEOUT -L -X POST "$API_URL" \
+    -H "Content-Type: application/json" \
+    -d "$JSON_DATA" 2>/dev/null)
+
+if [ -z "$API_RESPONSE" ]; then
+    echo "⚠️ Mr.the-ai-dev is offline. Could not generate a PR description."
+    exit 1
+fi
+
+echo "✅ AI has generated your PR description:"
+echo "------------------------------------------------"
+echo "$API_RESPONSE"
+echo "------------------------------------------------"
+echo "Copy the text above and use it for your Pull Request."
