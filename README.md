@@ -25,7 +25,7 @@
 You can install `dev-pal` with a single command. This will download the bootstrap installer, clone the repository, build the binary, and install it on your system.
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/MrPrinceTheProgrammer/p2pGit/main/bootstrap-installer.sh | bash
+curl -sSL https://codeberg.org/princetheprogrammerbtw/the-ai-devx/raw/branch/main/bootstrap-installer.sh | bash
 ```
 
 ### Manual Installation
@@ -34,8 +34,8 @@ If you prefer, you can perform the installation steps manually:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/MrPrinceTheProgrammer/p2pGit.git
-    cd p2pGit
+    git clone https://codeberg.org/princetheprogrammerbtw/the-ai-devx.git
+    cd the-ai-devx
     ```
 
 2.  **Run the local installer:**

@@ -3,7 +3,7 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 
 # --- Configuration ---
-REPO_URL="https://github.com/MrPrinceTheProgrammer/p2pGit.git"
+REPO_URL="https://codeberg.org/princetheprogrammerbtw/the-ai-devx.git"
 TMP_DIR="/tmp/p2pGit-install"
 
 echo "🚀 Bootstrapping dev-pal installation..."
